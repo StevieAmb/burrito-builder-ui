@@ -32,15 +32,49 @@ context('Assertions', () => {
     cy.get('p').contains('Order: Nothing selected')
   })
 
-  it('User should see a list of buttons they can click for toppings', () => {
-
+  it('User should see a list of buttons they can click for toppings on their burrito', () => {
+    cy.get('.button-container')
+    .children('button')
+    .should('have.length', 12)
   })
 
+  it('User should be able to click on buttons for toppings they wants, and see the toppings they ordered in a list', () => {
+    cy.get('.beans').contains('beans').click()
+    cy.get('.sofritas').contains('sofritas').click()
+    cy.get('.lettuce').contains('lettuce').click()
+    cy.get('.steak').contains('steak').click()
+
+    cy.get('p').contains('Order: beans, sofritas, lettuce, steak')
+  })
+
+  it('If user tries to submit order without putting in their name, the list of orders should not change', () => {
+    cy.get('.beans').contains('beans').click()
+    cy.get('.sofritas').contains('sofritas').click()
+    cy.get('.lettuce').contains('lettuce').click()
+    cy.get('.steak').contains('steak').click()
+
+    cy.get('p').contains('Order: beans, sofritas, lettuce, steak')
+    cy.get('.submit').contains('Submit Order').click()
+
+    cy.get('.orders')
+    .children('article')
+    .should('have.length', 2)
+  })
+
+  it('User should be able to put in their name, and click the toppings they want, and submit an order and change the order list', () => {
+    cy.intercept('POST', 'http://localhost:3001/api/v1/orders', 
+    {
+      name: 'Sandy',
+      ingredients: [ 'steak', 'lettuce', 'beans']
+    }
+    )
+    cy.get('#name').type('Sandy')
+    cy.get('.steak').contains('steak').click()
+    cy.get('.lettuce').contains('lettuce').click()
+    cy.get('.beans').contains('beans').click()
+  })
 
   })
-  
-  //user should see a list of buttons (how would I account for the list of buttons?)
-  //User should be able to click as many buttons as possible, and see the order thing change
   //user should be able to click submit button, and see the list of orders change
   //user should be able to change the amount of orders on the page, add to it
   //User should be able to see the background image
