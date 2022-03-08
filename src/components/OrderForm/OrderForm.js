@@ -52,6 +52,7 @@ class OrderForm extends Component {
     return (
       <form className='order-form'>
         <input
+          id="name"
           type='text'
           placeholder='Name'
           name='name'
@@ -64,7 +65,7 @@ class OrderForm extends Component {
 
         <p>Order: { this.state.ingredients.join(', ') || 'Nothing selected' }</p>
 
-        <button onClick={e => this.handleSubmit(e)}>
+        <button className='submit' onClick={e => this.handleSubmit(e)}>
           Submit Order
         </button>
       </form>
