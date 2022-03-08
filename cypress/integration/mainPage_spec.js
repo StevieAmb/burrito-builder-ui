@@ -72,9 +72,25 @@ context('Assertions', () => {
     cy.get('.steak').contains('steak').click()
     cy.get('.lettuce').contains('lettuce').click()
     cy.get('.beans').contains('beans').click()
+    cy.get('.submit').contains('Submit Order').click()
+  })
+
+  it('User should see the list change after successfully submitting their order', () => {
+    cy.intercept('POST', 'http://localhost:3001/api/v1/orders', 
+    {
+      name: 'Sandy',
+      ingredients: [ 'steak', 'lettuce', 'beans']
+    }
+    )
+    cy.get('#name').type('Sandy')
+    cy.get('.steak').contains('steak').click()
+    cy.get('.lettuce').contains('lettuce').click()
+    cy.get('.beans').contains('beans').click()
+    cy.get('.submit').contains('Submit Order').click()
+
+    cy.get('.orders')
+    .children('article')
+    .should('have.length', 3)
   })
 
   })
-  //user should be able to click submit button, and see the list of orders change
-  //user should be able to change the amount of orders on the page, add to it
-  //User should be able to see the background image
