@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
+import { postOrder } from '../../apiCalls';
 
 class OrderForm extends Component {
-  constructor(props) {
-    super();
-    this.props = props;
+  constructor() {
+    super()
     this.state = {
       name: '',
       ingredients: []
@@ -13,11 +13,28 @@ class OrderForm extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    this.clearInputs();
+    const newOrder = {
+      id: Date.now(),
+      ...this.state
+    }
+    if(this.state.name && this.state.ingredients.length > 0) {
+      postOrder(newOrder)
+      .then(data => this.props.addOrder(data))
+      this.clearInputs();
+    }
   }
 
   clearInputs = () => {
     this.setState({name: '', ingredients: []});
+  }
+
+  handleIngredientChange = (event) => {
+    event.preventDefault()
+    this.setState({ingredients: [...this.state.ingredients, event.target.name]})
+  }
+
+  handleNameChange = (event) => {
+    this.setState({name: event.target.value})
   }
 
   render() {
@@ -38,6 +55,7 @@ class OrderForm extends Component {
           name='name'
           value={this.state.name}
           onChange={e => this.handleNameChange(e)}
+          required
         />
 
         { ingredientButtons }
