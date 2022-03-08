@@ -41,14 +41,16 @@ class OrderForm extends Component {
     const possibleIngredients = ['beans', 'steak', 'carnitas', 'sofritas', 'lettuce', 'queso fresco', 'pico de gallo', 'hot sauce', 'guacamole', 'jalapenos', 'cilantro', 'sour cream'];
     const ingredientButtons = possibleIngredients.map(ingredient => {
       return (
+        <div className='button-container'>
         <button key={ingredient} name={ingredient} onClick={e => this.handleIngredientChange(e)}>
           {ingredient}
         </button>
+        </div>
       )
     });
 
     return (
-      <form>
+      <form className='order-form'>
         <input
           type='text'
           placeholder='Name'
